@@ -19,32 +19,30 @@ namespace Company.BLL.Repositories
         }
         public IEnumerable<T> GetAll()
         {
-                return _companyDb.Set<T>().ToList();
+            return _companyDb.Set<T>().ToList();
         }
 
         public T? Get(int id)
         {
-                return _companyDb.Set<T>().Find(id);
+            return _companyDb.Set<T>().Find(id);
         }
-
 
         public int Add(T department)
         {
-
-                _companyDb.Set<T>().Add(department);
-                return _companyDb.SaveChanges();
+            _companyDb.Set<T>().Add(department);
+            return _companyDb.SaveChanges();
         }
 
         public int Update(T department)
         {
-                 _companyDb.Set<T>().Update(department);
-                 return _companyDb.SaveChanges();        }
+            _companyDb.Set<T>().Update(department);
+            return _companyDb.SaveChanges();
+        }
 
         public int Delete(T department)
         {
-
-                _companyDb.Set<T>().Remove(department);
-                return _companyDb.SaveChanges();        }
-
+            _companyDb.Set<T>().Remove(department);
+            return _companyDb.SaveChanges();
         }
+    }
     }

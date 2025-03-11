@@ -3,14 +3,29 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Company.DAL.Data.Migrations
+namespace Company.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class AddEmployeeTable : Migration
+    public partial class Initial_migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Departments",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "10, 10"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Departments", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
@@ -25,8 +40,7 @@ namespace Company.DAL.Data.Migrations
                     Salary = table.Column<decimal>(type: "decimal(18,0)", nullable: false),
                     IsACtive = table.Column<bool>(type: "bit", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    HiringDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    HiringDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,6 +51,9 @@ namespace Company.DAL.Data.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Departments");
+
             migrationBuilder.DropTable(
                 name: "Employees");
         }
