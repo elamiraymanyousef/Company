@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Company.BLL.Repositories
 {
-    public class DepartmentRepository :GenaricRepository<Department> ,IDepartmentRepository
+    public class DepartmentRepository : GenaricRepository<Department>, IDepartmentRepository
     {
         #region After
         //private readonly CompanyDbContext _context;
@@ -50,4 +50,5 @@ namespace Company.BLL.Repositories
         public DepartmentRepository(CompanyDbContext context) : base(context)
         {
         }
+    }
 }
