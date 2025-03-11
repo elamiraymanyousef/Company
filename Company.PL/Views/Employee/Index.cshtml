@@ -1,0 +1,66 @@
+﻿@model IEnumerable<Employee>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 class="text-center my-4">All Employee</h1>
+<div class="text-end mb-3">
+    <a class="btn btn-primary" asp-action="Create">Create Employee</a>
+</div>
+
+@if (Model.Count() > 0)
+{
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(D => D.Name)</th>
+                <th>@Html.DisplayNameFor(D => D.Age)</th>
+                <th>@Html.DisplayNameFor(D => D.Email)</th>
+                <th>@Html.DisplayNameFor(D => D.Address)</th>
+                <th>@Html.DisplayNameFor(D => D.Phone)</th>
+                <th>@Html.DisplayNameFor(D => D.Salary)</th>
+                <th>@Html.DisplayNameFor(D => D.IsActive)</th>
+                <th>@Html.DisplayNameFor(D => D.IsDeleted)</th>
+                <th>@Html.DisplayNameFor(D => D.HiringDate)</th>
+                <th>@Html.DisplayNameFor(D => D.CreateAt)</th>
+
+                <th>Details</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in Model)
+            {
+                <tr>
+                    <td>@employee.Name</td>
+                    <td>@employee.Age</td>
+                    <td>@employee.Email</td>
+                    <td>@employee.Address</td>
+                    <td>@employee.Phone</td>
+                    <td>@employee.Salary</td>
+                    <td>@employee.IsActive</td>
+                    <td>@employee.IsDeleted</td>
+                    <td>@employee.HiringDate</td>
+                    <td>@employee.CreateAt</td>
+                    <td>
+                        <a class="btn btn-info" asp-action="Details" asp-route-id="@employee.Id">Details</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@employee.Id">Update</a>
+                    </td>
+                    <td>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@employee.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="mt-4 alert alert-warning">
+        <h3>There are NO Employee :(</h3>
+    </div>
+}
