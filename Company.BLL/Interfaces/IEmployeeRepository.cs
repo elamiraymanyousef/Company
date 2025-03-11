@@ -7,12 +7,12 @@ using Company.DAL.Models;
 
 namespace Company.BLL.Interfaces
 {
-    public interface IEmployeeRepository
+    public interface IEmployeeRepository : IGenaricRepository<Employee>
     {
-        IEnumerable<Employee> GetAll();
-        Employee? Get(int id);
-        int Add(Employee department);
-        int Update(Employee department);
-        int Delete(Employee department);
+        //IEnumerable<Employee> GetAll();
+        //Employee? Get(int id);
+        //int Add(Employee department);
+        //int Update(Employee department);
+        //int Delete(Employee department);
     }
 }

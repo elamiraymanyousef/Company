@@ -9,42 +9,49 @@ using Company.DAL.Models;
 
 namespace Company.BLL.Repositories
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository :GenaricRepository<Employee>, IEmployeeRepository
     {
-        private readonly CompanyDbContext _companyDb;
+        #region After
+        //private readonly CompanyDbContext _companyDb;
 
-        public EmployeeRepository(CompanyDbContext companyDb)
-        {
-            _companyDb = companyDb;
-        }
-        public IEnumerable<Employee> GetAll()
-        {
-            return _companyDb.Employees.ToList();
-        }
+        //public EmployeeRepository(CompanyDbContext companyDb)
+        //{
+        //    _companyDb = companyDb;
+        //}
+        //public IEnumerable<Employee> GetAll()
+        //{
+        //    return _companyDb.Employees.ToList();
+        //}
 
-        public Employee? Get(int id)
-        {
-            return _companyDb.Employees.Find(id);
-        }
+        //public Employee? Get(int id)
+        //{
+        //    return _companyDb.Employees.Find(id);
+        //}
 
-        public int Update(Employee department)
-        {
-            _companyDb.Employees.Update(department);
-            return _companyDb.SaveChanges();
-        }
+        //public int Update(Employee department)
+        //{
+        //    _companyDb.Employees.Update(department);
+        //    return _companyDb.SaveChanges();
+        //}
 
-        public int Add(Employee department)
-        {
-            _companyDb.Employees.Add(department);
-            return _companyDb.SaveChanges();    
-        }
+        //public int Add(Employee department)
+        //{
+        //    _companyDb.Employees.Add(department);
+        //    return _companyDb.SaveChanges();    
+        //}
 
-        public int Delete(Employee department)
-        {
-            _companyDb.Employees.Remove(department);
-            return _companyDb.SaveChanges();
-        }
+        //public int Delete(Employee department)
+        //{
+        //    _companyDb.Employees.Remove(department);
+        //    return _companyDb.SaveChanges();
+        //} 
+        #endregion
 
-       
+        // ask Clr to call the base class constructor
+        // to pass the context to the base class GenaricRepository
+        public EmployeeRepository(CompanyDbContext context) :base(context) 
+        {
+            
+        }
     }
 }

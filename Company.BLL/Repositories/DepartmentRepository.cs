@@ -9,40 +9,45 @@ using System.Threading.Tasks;
 
 namespace Company.BLL.Repositories
 {
-    public class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository :GenaricRepository<Department> ,IDepartmentRepository
     {
-        private readonly CompanyDbContext _context;
-        public DepartmentRepository(CompanyDbContext companyDbContext)
-        {
-            _context = companyDbContext;
-        }
-        public IEnumerable<Department> GetAll()
-        {
-            return _context.Departments.ToList();
-        }
+        #region After
+        //private readonly CompanyDbContext _context;
+        //public DepartmentRepository(CompanyDbContext companyDbContext)
+        //{
+        //    _context = companyDbContext;
+        //}
+        //public IEnumerable<Department> GetAll()
+        //{
+        //    return _context.Departments.ToList();
+        //}
 
-        public Department? Get(int id)
-        {
-            return _context.Departments.Find(id);
-        }
+        //public Department? Get(int id)
+        //{
+        //    return _context.Departments.Find(id);
+        //}
 
-        public int Add(Department department)
-        {
-            _context.Departments.Add(department);
-            return _context.SaveChanges();
-        }
+        //public int Add(Department department)
+        //{
+        //    _context.Departments.Add(department);
+        //    return _context.SaveChanges();
+        //}
 
-        public int Update(Department department)
-        {
-            _context.Departments.Update(department);
-            return _context.SaveChanges();
-        }
+        //public int Update(Department department)
+        //{
+        //    _context.Departments.Update(department);
+        //    return _context.SaveChanges();
+        //}
 
-        public int Delete(Department department)
-        {
-            _context.Departments.Remove(department);
-            return _context.SaveChanges();
-        }
+        //public int Delete(Department department)
+        //{
+        //    _context.Departments.Remove(department);
+        //    return _context.SaveChanges();
+        //} 
+        #endregion
 
-    }
+
+        public DepartmentRepository(CompanyDbContext context) : base(context)
+        {
+        }
 }
