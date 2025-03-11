@@ -9,43 +9,50 @@ using System.Threading.Tasks;
 
 namespace Company.BLL.Repositories
 {
-    public class EmployeeRepository : IEmployeeReposoitory
+    public class EmployeeRepository : GenericRepository<Employee> ,IEmployeeReposoitory
     {
-        private readonly CompanyDbContext _companyDb;
+        //Ask clr to create object  from CompanyDbContext 
 
-        public EmployeeRepository(CompanyDbContext companyDb)
+        public EmployeeRepository(CompanyDbContext companyDb):base(companyDb)
         {
-            _companyDb = companyDb;
         }
-        public IEnumerable<Employee> GetAll()
-        {
-            return _companyDb.Employees.ToList();
-        }
-
-        public Employee? Get(int id)
-        {
-            return _companyDb.Employees.Find(id);
-        }
-
-        
-        public int Add(Employee employee)
-        {
-             _companyDb.Employees.Add(employee);
-            return _companyDb.SaveChanges();
-        }
-
-        public int Delete(Employee employee)
-        {
-            _companyDb.Employees.Remove(employee);
-            return _companyDb.SaveChanges();
-        }
-
         
 
-        public int Update(Employee employee)
-        {
-            _companyDb.Employees.Update(employee);
-            return _companyDb.SaveChanges();
-        }
+        //private readonly CompanyDbContext _companyDb;
+
+        //public EmployeeRepository(CompanyDbContext companyDb)
+        //{
+        //    _companyDb = companyDb;
+        //}
+        //public IEnumerable<Employee> GetAll()
+        //{
+        //    return _companyDb.Employees.ToList();
+        //}
+
+        //public Employee? Get(int id)
+        //{
+        //    return _companyDb.Employees.Find(id);
+        //}
+
+
+        //public int Add(Employee employee)
+        //{
+        //     _companyDb.Employees.Add(employee);
+        //    return _companyDb.SaveChanges();
+        //}
+
+        //public int Delete(Employee employee)
+        //{
+        //    _companyDb.Employees.Remove(employee);
+        //    return _companyDb.SaveChanges();
+        //}
+
+
+
+        //public int Update(Employee employee)
+        //{
+        //    _companyDb.Employees.Update(employee);
+        //    return _companyDb.SaveChanges();
+        //}
     }
 }
