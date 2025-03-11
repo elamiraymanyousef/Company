@@ -9,7 +9,7 @@ namespace Company.PL.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _departmentRepository;
-
+        // Constructor Injection
         // Ask CLR to create an object of DepartmentRepository
         public DepartmentController(IDepartmentRepository departmentRepository)
         {
@@ -48,7 +48,7 @@ namespace Company.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int? id)
+        public IActionResult Details(int? id ,string ViewName="Details")
         {
             if (id is null)
                 return BadRequest();// stat code 400
@@ -64,27 +64,27 @@ namespace Company.PL.Controllers
                 CreateAt = department.CreateAt
             };
 
-            return View(departmentDTO);
+            return View(ViewName, departmentDTO);
         }
 
         [HttpGet]
         public IActionResult Edit(int? id ) 
         {
-            if (id is null)
-                return BadRequest();// stat code 400
-            var department = _departmentRepository.Get(id.Value);
+            //if (id is null)
+            //    return BadRequest();// stat code 400
+            //var department = _departmentRepository.Get(id.Value);
 
-            if (department is null)
-                return NotFound(new { StatusCode = 400, Message = $"Department with id : {id} not found" });
+            //if (department is null)
+            //    return NotFound(new { StatusCode = 400, Message = $"Department with id : {id} not found" });
 
-            var departmentDTO = new DepartmentDTO
-            {
-                Code = department.Code,
-                Name = department.Name,
-                CreateAt = department.CreateAt
-            };
+            //var departmentDTO = new DepartmentDTO
+            //{
+            //    Code = department.Code,
+            //    Name = department.Name,
+            //    CreateAt = department.CreateAt
+            //};
 
-            return View(departmentDTO);
+            return Details(id, "Edit");
         }
 
         // ايه الي راجع من الفورم بتاعت الاديت DepartmentDTO departmentDTO
@@ -113,38 +113,38 @@ namespace Company.PL.Controllers
         [HttpGet]
         public IActionResult Delete(int? id)
         {
-            if (id is null)
-                return BadRequest();// stat code 400
-            var department = _departmentRepository.Get(id.Value);
-            if (department is null)
-                return NotFound(new { StatusCode = 400, Message = $"Department with id : {id} not found" });
-            var departmentDTO = new DepartmentDTO
-            {
-                Code = department.Code,
-                Name = department.Name,
-                CreateAt = department.CreateAt
-            };
-            return View(departmentDTO);
+            //if (id is null)
+            //    return BadRequest();// stat code 400
+            //var department = _departmentRepository.Get(id.Value);
+            //if (department is null)
+            //    return NotFound(new { StatusCode = 400, Message = $"Department with id : {id} not found" });
+            //var departmentDTO = new DepartmentDTO
+            //{
+            //    Code = department.Code,
+            //    Name = department.Name,
+            //    CreateAt = department.CreateAt
+            //};
+            return Details(id, "Delete");
         }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Delete([FromRoute]int? id, DepartmentDTO dTO)
         {
-            if (ModelState.IsValid) return BadRequest();
-            var departmentm = new Department()
-            {
-                Id = (int)id,
-                Code = dTO.Code,
-                Name = dTO.Name,
-                CreateAt = dTO.CreateAt
-            };
-            int count = _departmentRepository.Delete(departmentm);
-            if (count > 0)
-            {
-                return RedirectToAction(nameof(Index)); // بتحولك علي الصفحة الرئيسية
-            }
-            // لو مش عاوز يعمل تعديل بيبقي يرجعلك علي الفورم بتاعت الاديت
+           if (!ModelState.IsValid) return BadRequest();
+           var departmentm = new Department()
+           {
+               Id = (int)id,
+               Code = dTO.Code,
+               Name = dTO.Name,
+               CreateAt = dTO.CreateAt
+           };
+           int count = _departmentRepository.Delete(departmentm);
+           if (count > 0)
+           {
+               return RedirectToAction(nameof(Index)); // بتحولك علي الصفحة الرئيسية
+           }
+            //لو مش عاوز يعمل تعديل بيبقي يرجعلك علي الفورم بتاعت الاديت
             return View(dTO);
         }
 
