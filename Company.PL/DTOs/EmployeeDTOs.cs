@@ -14,15 +14,15 @@ namespace Company.PL.DTOs
 
 
         public string Address { get; set; }
-        //[Phone(ErrorMessage = "Phone Invalid")]
+        [Phone(ErrorMessage = "Phone Invalid")]
         public string Phone { get; set; }
-        //[DataType(DataType.Currency)]
+        [DataType(DataType.Currency)]
         public string Salary { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-       // [Display(Name = "Hiring Date")]
+        [Display(Name = "Hiring Date")]
         public DateTime HiringDate { get; set; }
-       // [Display(Name = "Create At")]
+        [Display(Name = "Create At")]
         public DateTime CreateAt { get; set; }
     }
 }
