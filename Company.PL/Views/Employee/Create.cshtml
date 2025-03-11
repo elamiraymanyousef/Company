@@ -1,0 +1,142 @@
+﻿@* @model EmployeeDTOs
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1 class="text-center my-4">Create Department</h1>
+
+<div>
+
+
+    <form  asp-action="Create">
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Age"></label>
+            <input asp-for="Age" class="form-control" />
+            <span asp-validation-for="Age" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Address"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Phone"></label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input asp-for="IsActive" class="form-check" />
+            <label class="col-form-label" asp-for="IsActive"></label>
+        </div>
+        <div class="form-group">
+            <input asp-for="IsDeleted" class="form-check" />
+            <label class="col-form-label" asp-for="IsDeleted"></label>
+        </div>
+
+        <div class="form-group mb-4">
+            <label class="col-form-label" asp-for="HiringDate"></label>
+            <input asp-for="HiringDate" class="form-control" />
+            <span asp-validation-for="HiringDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group mb-4">
+            <label class="col-form-label" asp-for="CreateAt"></label>
+            <input asp-for="CreateAt" class="form-control" />
+            <span asp-validation-for="CreateAt" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-start gap-3">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+            <a asp-controller="Employee" asp-action="Index" class="btn btn-light">Back to List</a>
+        </div>
+    </form>
+</div>
+
+ *@
+
+
+ @model EmployeeDTOs
+@{
+    ViewData["Title"] = "Creat";
+}
+
+<h1 class="text-center my-4">Create Department</h1>
+<div class="container">
+    <form asp-action="Create">
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Age"></label>
+            <input asp-for="Age" class="form-control" />
+            <span asp-validation-for="Age" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Email"></label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Address"></label>
+            <input asp-for="Address" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Phone"></label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="Salary"></label>
+            <input asp-for="Salary" class="form-control" />
+            <span asp-validation-for="Salary" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <input asp-for="IsActive" class="form-chack" />
+            <label class="col-form-label" asp-for="IsActive"></label>
+        </div>
+
+        <div class="form-group">
+            <input asp-for="IsDeleted" class="form-chack" />
+            <label class="col-form-label" asp-for="IsDeleted"></label>
+        </div>
+
+        <div class="form-group">
+            <label class="col-form-label" asp-for="HiringDate"></label>
+            <input asp-for="HiringDate" class="form-control" />
+            <span asp-validation-for="HiringDate" class="text-danger"></span>
+        </div>
+
+
+
+         <div class="form-group mb-4">
+             <label class="col-form-label" asp-for="CreateAt"></label> 
+             <input asp-for="CreateAt" class="form-control" /> 
+             <span asp-validation-for="CreateAt" class="text-danger"></span> 
+         </div> 
+
+        <div class="d-flex justify-content-start gap-3">
+            <input type="submit" value="Submit" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-light">Back to List</a>
+        </div>
+    </form>
+</div>

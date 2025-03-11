@@ -12,8 +12,9 @@ namespace Company.BLL.Repositories
     public class DepartmentRepository :GenericRepository<Department> , IDepartmentRepository
     {
         //Ask clr to create object  from CompanyDbContext 
-        public DepartmentRepository(CompanyDbContext companyDb) : base(companyDb)
+        public DepartmentRepository(CompanyDbContext companyDb): base(companyDb)
         {
+            
         }
         //private readonly CompanyDbContext _context;
         //public DepartmentRepository(CompanyDbContext companyDbContext)
