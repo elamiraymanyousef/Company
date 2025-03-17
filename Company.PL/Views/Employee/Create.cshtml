@@ -1,6 +1,28 @@
 ﻿@model CreatEmployeeDTO
+@inject IDepartmentRepository _departmentRepository;
 @{
     ViewData["Title"] = "Creat";
+	// <option value="">Select Department</option>
+	// cast viewdata to same type of return from controller
+	// ========first way to send data from controller to view ==========
+    // var AllDepartments = new SelectList(ViewData["Department"] as IEnumerable<Department>, nameof(Department.Id), nameof(Department.Name));
+
+	// ========second way to get data from  view directly==========
+	var AllDepartments = new SelectList(_departmentRepository.GetAll(), nameof(Department.Id), nameof(Department.Name));
+
+	// ========there is another way to get data from view directly==========
+	// use for loop to get data from view
+    // var AllDepartments = ViewData["Department"] as IEnumerable<Department>
+}
+
+
+@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    @* لكي يعرضها عندما يضيف قسم *@
+    <div class="alert alert-success">
+        @TempData["Message"];
+    </div>
+
 }
 
 <h1 class="text-center my-4">Create Department</h1>
@@ -52,14 +74,13 @@
         @*     <label class="col-form-label" asp-for="IsDeleted"></label> *@
         @* </div> *@
 
-        @* <div class="form-group"> *@
-        @*     <label class="col-form-label" asp-for="HiringDate"></label> *@
-        @*     <input asp-for="HiringDate" class="form-control" /> *@
-        @*     <span asp-validation-for="HiringDate" class="text-danger"></span> *@
-        @* </div> *@
+        @* <div class="form-group"> *@ 
+        @* @*     <label class="col-form-label" asp-for="HiringDate"></label> *@ 
+        @* @*     <input asp-for="HiringDate" class="form-control" /> *@ 
+        @* @*     <span asp-validation-for="HiringDate" class="text-danger"></span> *@ 
 
-        @* <div class="form-group"> *@
-        @*     <label class="col-form-label" asp-for="HiringDate"></label> *@
+        @* <div class="form-group">
+             <label class="col-form-label" asp-for="HiringDate"></label> *@
         @*     <input asp-for="HiringDate" class="form-control" /> *@
         @*     <span asp-validation-for="HiringDate" class="text-danger"></span> *@
         @* </div> *@
@@ -67,10 +88,15 @@
 
         <partial name="EmployeePartialView/_CreatEditePartialView" />
         
-        
+         <div class="form-group"> 
+              <label class="col-form-label" asp-for="DepartmentId"></label> 
+             <select asp-for="DepartmentId" asp-items="@AllDepartments" class=" form-control">
+                <option value="@null">-- Select Department --</option>
+            </select> 
+          </div>  
         <div class="d-flex justify-content-start gap-3">
-            <input type="submit" value="Submit" class="btn btn-primary" />
-            <a asp-action="Index" class="btn btn-light">Back to List</a>
+            <input type="submit" value="Submit" class="mt-4 btn btn-primary" />
+            <a asp-action="Index" class="mt-4 btn btn-light">Back to List</a>
         </div>
     </form>
 </div>

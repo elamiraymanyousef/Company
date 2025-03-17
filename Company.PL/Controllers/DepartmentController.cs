@@ -1,4 +1,5 @@
-﻿using Company.BLL.Interfaces;
+﻿using AutoMapper;
+using Company.BLL.Interfaces;
 using Company.DAL.Models;
 using Company.PL.DTOs;
 using Microsoft.AspNetCore.Mvc;
@@ -8,20 +9,43 @@ namespace Company.PL.Controllers
     // MVC Controller
     public class DepartmentController : Controller
     {
+        private readonly IMapper _mapper;
         private readonly IDepartmentRepository _departmentRepository;
+
+
+
         // Constructor Injection
         // Ask CLR to create an object of DepartmentRepository
-        public DepartmentController(IDepartmentRepository departmentRepository)
+
+        public DepartmentController(IMapper mapper,IDepartmentRepository departmentRepository)
         {
+            _mapper = mapper;
             _departmentRepository = departmentRepository;
         }
 
+
+
+
+
         [HttpGet] // GET: Department/Index
-        public IActionResult Index()
+        public IActionResult Index(string? SearchName)
         {
-            var departments = _departmentRepository.GetAll();
+            IEnumerable<Department> departments;
+            if(string.IsNullOrEmpty(SearchName))
+            {
+                departments = _departmentRepository.GetAll();
+            }
+            else
+            {
+                departments = _departmentRepository.GetDepartmentByName(SearchName);
+            }
             return View(departments);
         }
+
+
+
+
+
 
         [HttpGet] // GET: Department/Create
         public IActionResult Create()
@@ -34,15 +58,22 @@ namespace Company.PL.Controllers
         {
             if (ModelState.IsValid) // Server Side Validation
             {
-                var department = new Department
-                {
-                    Code = model.Code,
-                    Name = model.Name,
-                    CreateAt = model.CreateAt
-                };
+                //var department = new Department
+                //{
+                //    Code = model.Code,
+                //    Name = model.Name,
+                //    CreateAt = model.CreateAt
+                //};
+
+                // ====== outo mapping ======
+                var department= _mapper.Map<Department>(model);
                 var count = _departmentRepository.Add(department);
                 if (count > 0)
+                {
+                    TempData["Message"] = "Department Added Successfully";
                     return RedirectToAction("Index");
+                }
+                   
             }
             return View(model);
         }
@@ -103,7 +134,8 @@ namespace Company.PL.Controllers
                 int count = _departmentRepository.Update(departmentm);
                 if (count > 0)
                 {
-                     return RedirectToAction(nameof(Index)); // بتحولك علي الصفحة الرئيسية
+                     TempData["Message"] = "Department Updated Successfully";
+                    return RedirectToAction(nameof(Index)); // بتحولك علي الصفحة الرئيسية
                 }
             // لو مش عاوز يعمل تعديل بيبقي يرجعلك علي الفورم بتاعت الاديت
             return View(department); 
@@ -142,7 +174,8 @@ namespace Company.PL.Controllers
            int count = _departmentRepository.Delete(departmentm);
            if (count > 0)
            {
-               return RedirectToAction(nameof(Index)); // بتحولك علي الصفحة الرئيسية
+                TempData["Message"] = "Department Deleted Successfully";
+                return RedirectToAction(nameof(Index)); // بتحولك علي الصفحة الرئيسية
            }
             //لو مش عاوز يعمل تعديل بيبقي يرجعلك علي الفورم بتاعت الاديت
             return View(dTO);

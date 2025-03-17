@@ -12,5 +12,8 @@ namespace Company.DAL.Models
         public string Name { get; set; }
         public DateTime CreateAt { get; set; }
 
+        // navigation property
+        public virtual ICollection<Employee> Employees { get; set; }=new HashSet<Employee>();
+
     }
 }

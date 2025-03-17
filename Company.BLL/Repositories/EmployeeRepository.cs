@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 using Company.BLL.Interfaces;
 using Company.DAL.Data.Contexts;
 using Company.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Company.BLL.Repositories
 {
     public class EmployeeRepository :GenaricRepository<Employee>, IEmployeeRepository
     {
+        private readonly CompanyDbContext _context;
         #region After
         //private readonly CompanyDbContext _companyDb;
 
@@ -51,7 +53,14 @@ namespace Company.BLL.Repositories
         // to pass the context to the base class GenaricRepository
         public EmployeeRepository(CompanyDbContext context) :base(context) 
         {
-            
+            _context = context;
+        }
+
+        public IEnumerable<Employee> GetByName(string SearchName)
+        {
+            return _context.Employees.Include(D => D.Department)
+                .Where(e => e.Name.ToLower()
+                .Contains(SearchName.ToLower())).ToList();
         }
     }
 }

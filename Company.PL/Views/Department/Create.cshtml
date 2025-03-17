@@ -4,6 +4,15 @@
     ViewData["Title"] = "Create";
 }
 
+@if(!string.IsNullOrEmpty(TempData["Message"]as string))
+{
+    @* لكي يعرضها عندما يضيف قسم *@
+<div class="alert alert-success">
+	@TempData["Message"];
+</div>
+
+}
+
 <h1 class="text-center my-4">Create Department</h1>
 <div class="container">
     <form asp-action="Create">

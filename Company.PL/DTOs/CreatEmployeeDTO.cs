@@ -20,8 +20,11 @@ namespace Company.PL.DTOs
         public bool IsDeleted { get; set; }
         [DisplayName("Hiring Date")]
         public DateTime HiringDate { get; set; }
-       
-        
 
+        [Display(Name ="Department")]
+        public int? DepartmentId { get; set; }
+
+        //public string? EmoloyeeType { get; set; }
+        public string? Department { get; set; }
     }
 }

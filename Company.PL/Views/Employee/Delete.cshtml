@@ -2,7 +2,14 @@
 @{
     ViewData["Title"] = "Delete";
 }
+@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    @* لكي يعرضها عندما يضيف قسم *@
+    <div class="alert alert-success">
+        @TempData["Message"];
+    </div>
 
+}
 <h1 class="text-center my-4">Delete Employee</h1>
 <div class="container">
     <form asp-action="Delete">

@@ -1,6 +1,7 @@
 ﻿using Company.BLL.Interfaces;
 using Company.DAL.Data.Contexts;
 using Company.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Company.BLL.Repositories
 {
     public class DepartmentRepository : GenaricRepository<Department>, IDepartmentRepository
     {
+        private readonly CompanyDbContext _context;
         #region After
         //private readonly CompanyDbContext _context;
         //public DepartmentRepository(CompanyDbContext companyDbContext)
@@ -49,6 +51,14 @@ namespace Company.BLL.Repositories
 
         public DepartmentRepository(CompanyDbContext context) : base(context)
         {
+            _context = context;
+        }
+
+        public IEnumerable<Department> GetDepartmentByName(string name)
+        {
+            return _context.Departments
+                .Where(e => e.Name.ToLower()
+                .Contains(name.ToLower())).ToList();
         }
     }
 }

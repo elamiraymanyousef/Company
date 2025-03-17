@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using AutoMapper;
 using Company.BLL.Interfaces;
 using Company.BLL.Repositories;
 using Company.DAL.Models;
@@ -9,97 +10,132 @@ namespace Company.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-        //Allow Clr to creat Object fron EmployeeRepository
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        private readonly IMapper _mapper;
+
+        //private readonly IDepartmentRepository _departmentRepository;
+
+        public EmployeeController(IEmployeeRepository employeeRepository , IMapper mapper/*IDepartmentRepository departmentRepository*/)
         {
             _employeeRepository = employeeRepository;
+            _mapper = mapper;
+            //_departmentRepository = departmentRepository;
         }
 
-        [HttpGet] // GET: Department/Index
-        public IActionResult Index()
-        {
-            var departments = _employeeRepository.GetAll();
-            return View(departments);
-        }
+
 
         [HttpGet]
-        public IActionResult Create()
-        { 
+        public IActionResult Index(string? SearchName)
+        {
+            IEnumerable<Employee> employees;
+            if (string.IsNullOrEmpty(SearchName))
+            {
+                 employees = _employeeRepository.GetAll();
+            }
+            else
+            {
+                // for search by name
+                employees = _employeeRepository.GetByName(SearchName);
+            }
+            
+
+            return View(employees);
+        }
+
+
+
+        [HttpGet]
+        public IActionResult Create(/*[FromServices] IDepartmentRepository _departmentRepositor*/)
+        {
+            
+            //ViewData["Department"] = _departmentRepository.GetAll();
             return View();
         }
+
+
 
         [HttpPost]
         public IActionResult Create(CreatEmployeeDTO creatEmployeeDTO)
         {
             if (ModelState.IsValid)
             {
-                var Employee = new Employee()
+                //var employee = new Employee()
+                //{
+                //    Name = creatEmployeeDTO.Name,
+                //    Email = creatEmployeeDTO.Email,
+                //    Address = creatEmployeeDTO.Address,
+                //    Salary = creatEmployeeDTO.Salary,
+                //    HiringDate = creatEmployeeDTO.HiringDate,
+                //    IsACtive = creatEmployeeDTO.IsACtive,
+                //    IsDeleted = creatEmployeeDTO.IsDeleted,
+                //    Phone = creatEmployeeDTO.Phone,
+                //    Age = creatEmployeeDTO.Age,
+                //    DepartmentId = creatEmployeeDTO.DepartmentId
+                //};
+
+
+                // =================== Using AutoMapper ===================
+                var employee = _mapper.Map<Employee>(creatEmployeeDTO);
+                var count = _employeeRepository.Add(employee);
+
+                //======== =================================================
+                if (count > 0)
                 {
-                    Name = creatEmployeeDTO.Name,
-                    Email = creatEmployeeDTO.Email,
-                    Address = creatEmployeeDTO.Address,
-                    Salary = creatEmployeeDTO.Salary,
-                    HiringDate = creatEmployeeDTO.HiringDate,
-                    IsACtive = creatEmployeeDTO.IsACtive,
-                    IsDeleted = creatEmployeeDTO.IsDeleted,
-                    Phone = creatEmployeeDTO.Phone,
-                    Age = creatEmployeeDTO.Age
-                };
-                var Count = _employeeRepository.Add(Employee);
-                if (Count > 0)
-                {
+                    TempData["Message"] = "Employee Added Successfully";
                     return RedirectToAction("Index");
                 }
             }
-            // لما يكون فيه خطأ في الادخال يعيد البيانات الي الفورم
             return View(creatEmployeeDTO);
         }
 
-
         [HttpGet]
-        public IActionResult Details(int? id,String VeiwStat= "Details")
-
+        public IActionResult Details(int? id, string viewStat = "Details")
         {
             if (id is null)
                 return BadRequest();
             var employee = _employeeRepository.Get(id.Value);
             if (employee is null)
                 return NotFound(new { StatusCode = 400, Message = $"Employee with id : {id} not found" });
-            return View(VeiwStat , employee);
+            return View(viewStat, employee);
         }
 
         [HttpGet]
-        public IActionResult Edit([FromRoute]int? id)
+        public IActionResult Edit([FromRoute] int? id ,[FromServices] IDepartmentRepository _departmentRepository)
         {
-            return Details(id,"Edit");
+            // TO Get All Department
+            ViewData["Department"] = _departmentRepository.GetAll();
+            return Details(id, "Edit");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        // متنساش ال id بتاع الراوت علشان تعرف تعدل علي العنصر الصح
-        public IActionResult Edit([FromRoute]int? id, CreatEmployeeDTO employeeDTO)
+        public IActionResult Edit([FromRoute] int? id, CreatEmployeeDTO employeeDTO)
         {
             if (ModelState.IsValid)
             {
-                var Employee = new Employee()
+                //var employee = new Employee()
+                //{
+                //    Name = employeeDTO.Name,
+                //    Email = employeeDTO.Email,
+                //    Address = employeeDTO.Address,
+                //    Salary = employeeDTO.Salary,
+                //    HiringDate = employeeDTO.HiringDate,
+                //    IsACtive = employeeDTO.IsACtive,
+                //    IsDeleted = employeeDTO.IsDeleted,
+                //    Phone = employeeDTO.Phone,
+                //    Age = employeeDTO.Age,
+                //    DepartmentId = employeeDTO.DepartmentId
+                //};
+
+                //=================== Using AutoMapper ===================
+                var employee = _mapper.Map<Employee>(employeeDTO);
+                var count = _employeeRepository.Update(employee);
+                if (count > 0)
                 {
-                    Name = employeeDTO.Name,
-                    Email = employeeDTO.Email,
-                    Address = employeeDTO.Address,
-                    Salary = employeeDTO.Salary,
-                    HiringDate = employeeDTO.HiringDate,
-                    IsACtive = employeeDTO.IsACtive,
-                    IsDeleted = employeeDTO.IsDeleted,
-                    Phone = employeeDTO.Phone,
-                    Age = employeeDTO.Age
-                };
-                var Count = _employeeRepository.Update(Employee);
-                if (Count > 0)
-                {
+                    TempData["Message"] = "Employee Updated Successfully";
                     return RedirectToAction("Index");
                 }
-                return View(Employee);
+                return View(employee);
             }
             return View(employeeDTO);
         }
@@ -110,28 +146,39 @@ namespace Company.PL.Controllers
             return Details(id, "Delete");
         }
 
+
+
+
+
+
+
+
+        [HttpPost]
         public IActionResult Delete([FromRoute] int? id, CreatEmployeeDTO employeeDTO)
         {
             if (!ModelState.IsValid) return BadRequest();
-            var Employee = new Employee()
-            {
-                Id = id.Value,
-                Name = employeeDTO.Name,
-                Email = employeeDTO.Email,
-                Address = employeeDTO.Address,
-                Salary = employeeDTO.Salary,
-                HiringDate = employeeDTO.HiringDate,
-                IsACtive = employeeDTO.IsACtive,
-                IsDeleted = employeeDTO.IsDeleted,
-                Phone = employeeDTO.Phone,
-                Age = employeeDTO.Age
-            };
-            int count = _employeeRepository.Delete(Employee);
+            //var employee = new Employee()
+            //{
+            //    Id = id.Value,
+            //    Name = employeeDTO.Name,
+            //    Email = employeeDTO.Email,
+            //    Address = employeeDTO.Address,
+            //    Salary = employeeDTO.Salary,
+            //    HiringDate = employeeDTO.HiringDate,
+            //    IsACtive = employeeDTO.IsACtive,
+            //    IsDeleted = employeeDTO.IsDeleted,
+            //    Phone = employeeDTO.Phone,
+            //    Age = employeeDTO.Age
+            //};
+
+            //======================== outoMapper ========================
+            var employee = _mapper.Map<Employee>(employeeDTO);
+            int count = _employeeRepository.Delete(employee);
             if (count > 0)
             {
-                return RedirectToAction(nameof(Index)); // بتحولك علي الصفحة الرئيسية
+                TempData["Message"] = "Employee Deleted Successfully";
+                return RedirectToAction(nameof(Index));
             }
-            //لو مش عاوز يعمل تعديل بيبقي يرجعلك علي الفورم بتاعت الاديت
             return View(employeeDTO);
         }
     }

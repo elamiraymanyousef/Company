@@ -3,7 +3,14 @@
 @{
     ViewData["Title"] = "Edit";
 }
+@if (!string.IsNullOrEmpty(TempData["Message"] as string))
+{
+    @* لكي يعرضها عندما يضيف قسم *@
+    <div class="alert alert-success">
+        @TempData["Message"];
+    </div>
 
+}
 <h1>Edit Department </h1>
 
 

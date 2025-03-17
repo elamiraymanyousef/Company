@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Company.BLL.Interfaces;
 using Company.DAL.Data.Contexts;
 using Company.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Company.BLL.Repositories
 {
@@ -19,6 +20,12 @@ namespace Company.BLL.Repositories
         }
         public IEnumerable<T> GetAll()
         {
+            // to include department name in the employee list
+            // return _companyDb.Set<T>().Include("Department").ToList();
+            if(typeof(T) == typeof(Employee))
+            {
+                return (IEnumerable<T>)_companyDb.Set<T>().Cast<Employee>().Include(e => e.Department).ToList();
+            }
             return _companyDb.Set<T>().ToList();
         }
 

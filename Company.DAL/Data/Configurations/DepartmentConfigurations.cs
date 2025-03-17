@@ -14,6 +14,10 @@ namespace Company.DAL.Data.Configurations
         public void Configure(EntityTypeBuilder<Department> D)
         {
             D.Property(d => d.Id).UseIdentityColumn(10, 10);
+            D.HasMany(D => D.Employees)
+                .WithOne(E => E.Department)
+                .HasForeignKey(E => E.DepartmentId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

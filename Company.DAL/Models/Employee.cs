@@ -17,5 +17,12 @@ namespace Company.DAL.Models
         public bool IsACtive { get; set; }
         public bool IsDeleted { get; set; }
         public DateTime HiringDate { get; set; }
+
+
+        // relation with department
+        public int? DepartmentId { get; set; }
+
+        // virtualليه ال 
+        public virtual Department? Department { get; set; }
     }
 }
