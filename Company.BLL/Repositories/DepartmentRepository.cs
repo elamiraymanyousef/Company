@@ -11,11 +11,21 @@ namespace Company.BLL.Repositories
 {
     public class DepartmentRepository :GenericRepository<Department> , IDepartmentRepository
     {
+        private readonly CompanyDbContext _companyDb;
+
         //Ask clr to create object  from CompanyDbContext 
         public DepartmentRepository(CompanyDbContext companyDb): base(companyDb)
         {
-            
+            _companyDb = companyDb;
         }
+
+        public List<Department> GetByName(string Name)
+        {
+
+       
+            return _companyDb.Departments.Where(E => E.Name.ToLower().Contains(Name.ToLower())).ToList();
+        
+         }
         //private readonly CompanyDbContext _context;
         //public DepartmentRepository(CompanyDbContext companyDbContext)
         //{

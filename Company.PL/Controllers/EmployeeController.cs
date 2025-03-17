@@ -1,4 +1,5 @@
-﻿using Company.BLL.Interfaces;
+﻿using AutoMapper;
+using Company.BLL.Interfaces;
 using Company.BLL.Repositories;
 using Company.DAL.Models;
 using Company.PL.DTOs;
@@ -8,22 +9,45 @@ namespace Company.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-      
-            private readonly IEmployeeReposoitory _employeeReposoitory;
+        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IEmployeeReposoitory _employeeReposoitory;
+        private readonly IMapper _mapper;
 
-            // Ask CLR to create an object of DepartmentRepository
-            public EmployeeController(IEmployeeReposoitory employeeReposoitory)
+        // Ask CLR to create an object of DepartmentRepository
+        public EmployeeController(
+                IDepartmentRepository departmentRepository,
+                IEmployeeReposoitory employeeReposoitory,
+                IMapper mapper
+
+                )
             {
-                 _employeeReposoitory = employeeReposoitory;
-            }
+            _departmentRepository = departmentRepository;
+            _employeeReposoitory = employeeReposoitory;
+            _mapper = mapper;
+        }
 
             [HttpGet] // GET: Department/Index
-            public IActionResult Index()
+            public IActionResult Index( string? searchValue)
             {
-                var employees = _employeeReposoitory.GetAll();
+
+            IEnumerable<Employee> employees ;
+            if (string.IsNullOrEmpty(searchValue))
+            {
+                employees = _employeeReposoitory.GetAll();
+            }
+            else
+            {
+                employees = _employeeReposoitory.GetByName(searchValue);
+            }
+
+            //ViewData["Message"] = "Welcome To Employee Page";
+            ViewBag.Message = "Welcome To Employee Page";
+
+             //employees = _employeeReposoitory.GetAll();
                 return View(employees);
             }
 
+        #region //[HttpGet] // GET: Department/Create
         //[HttpGet] // GET: Department/Create
         //public IActionResult Create()
         //{
@@ -55,34 +79,41 @@ namespace Company.PL.Controllers
         //            return RedirectToAction(nameof(Index));
         //    }
         //    return View(model);
-        //}
+        //} 
+        #endregion
 
         [HttpGet]
         public IActionResult Create()
         {
+            ViewData["Departments"] = _departmentRepository.GetAll();
             return View();
         }
-
+        // POST: Employee/Create
         [HttpPost]
         public IActionResult Create(EmployeeDTOs employeeDTO)
         {
             if (ModelState.IsValid)
             {
-                var Employee = new Employee()
-                {
-                    Name = employeeDTO.Name,
-                    Email = employeeDTO.Email,
-                    Address = employeeDTO.Address,
-                    Salary = employeeDTO.Salary,
-                    HiringDate = employeeDTO.HiringDate,
-                    IsActive = employeeDTO.IsActive,
-                    IsDeleted = employeeDTO.IsDeleted,
-                    Phone = employeeDTO.Phone,
-                    Age = employeeDTO.Age
-                };
-                var Count = _employeeReposoitory.Add(Employee);
+                #region Manual Maper
+                //var Employee = new Employee()
+                //{
+                //    Name = employeeDTO.Name,
+                //    Email = employeeDTO.Email,
+                //    Address = employeeDTO.Address,
+                //    Salary = employeeDTO.Salary,
+                //    HiringDate = employeeDTO.HiringDate,
+                //    IsActive = employeeDTO.IsActive,
+                //    IsDeleted = employeeDTO.IsDeleted,
+                //    Phone = employeeDTO.Phone,
+                //    Age = employeeDTO.Age,
+                //    DepartmentId = employeeDTO.DepartmentId
+                //}; 
+                #endregion
+                var employee = _mapper.Map<Employee>(employeeDTO);
+                var Count = _employeeReposoitory.Add(employee);
                 if (Count > 0)
                 {
+                    TempData["Message"] = "Employee Added Successfully!";
                     return RedirectToAction("Index");
                 }
             }
@@ -107,15 +138,16 @@ namespace Company.PL.Controllers
             public IActionResult Edit(int? id)
             {
 
-                //if (id is null)
-                //    return BadRequest();
-                //var department = _departmentRepository.Get(id.Value);
+            //if (id is null)
+            //    return BadRequest();
+            //var department = _departmentRepository.Get(id.Value);
 
-                //if (department is null)
-                //    return NotFound();
+            //if (department is null)
+            //    return NotFound();
 
+            ViewData["Departments"] = _departmentRepository.GetAll();
 
-                return Details(id, "Edit");
+            return Details(id, "Edit");
             }
             // 
             [HttpPost]
@@ -129,8 +161,12 @@ namespace Company.PL.Controllers
                     {
                         var count = _employeeReposoitory.Update(employee);
                         if (count > 0)
-                            return RedirectToAction("Index");
+                    {
+                        TempData["Message"] = "Employee Updated Successfully!";
+                        return RedirectToAction("Index");
+
                     }
+                }
                 }
                 return View(employee);
 
@@ -138,7 +174,7 @@ namespace Company.PL.Controllers
 
 
             }
-
+             // GET: Employee/Delete/5
             [HttpGet]
             public IActionResult Delete(int? id)
             {
@@ -165,10 +201,14 @@ namespace Company.PL.Controllers
                     {
                         var count = _employeeReposoitory.Delete(employee);
                         if (count > 0)
-                            return RedirectToAction("Index");
+                    {
+                        TempData["Message"] = "Employee Deleted Successfully!";
+                        return RedirectToAction("Index");
+                    }
                     }
                 }
-                return View(employee);
+            // لما يكون فيه خطأ في الادخال يعيد البيانات الي الفورم
+            return View(employee);
 
 
 

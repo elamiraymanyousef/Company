@@ -24,5 +24,8 @@ namespace Company.PL.DTOs
         public DateTime HiringDate { get; set; }
         [Display(Name = "Create At")]
         public DateTime CreateAt { get; set; }
+        [Display(Name = "Department")]
+        public int? DepartmentId { get; set; }
+        public String? Department { get; set; }
     }
 }

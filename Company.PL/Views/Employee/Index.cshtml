@@ -3,15 +3,53 @@
 @{
     ViewData["Title"] = "Index";
 }
+@* <div class=" alert-info">
+    @ViewData["Message"]
+</div> *@
+@{
+    var message = TempData["Message"] as string;
+}
+
+@if (!string.IsNullOrEmpty(message))
+{
+    <div aria-live="polite" aria-atomic="true" class="toast-container position-fixed p-3" style="bottom: 20px; right: 20px;">
+        <div class="toast fade show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="/imgs/R.png" class="rounded me-2" width="30" height="30" alt="Success Icon">
+                <strong class="me-auto text-success">Success!</strong>
+                <small>Just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                @TempData["Message"]
+            </div>
+        </div>
+    </div>
+}
+
 
 <h1 class="text-center my-4">All Employee</h1>
 <div class="text-end mb-3">
     <a class="btn btn-primary" asp-action="Create">Create Employee</a>
 </div>
+<br />
+<br />
+<div class="m-2">  
+    <form class="row offset-2" asp-action="Index" method="get">
 
+        <div class=" col-8">   
+            <input id="searchValue" class="form-control" type="text" name="searchValue" placeholder="Search by Employee Name " />
+        </div>
+        <div class=" col-4">
+            <input type="submit" class="btn btn-outline-dark" value="Search" />
+        </div>
+
+    </form>
+
+</div>
 @if (Model.Count() > 0)
 {
-    <table class="table table-striped table-bordered table-hover">
+    <table class="table table-striped table-bordered table-hover  mt-3">
         <thead class="table-dark">
             <tr>
                 <th>@Html.DisplayNameFor(D => D.Name)</th>
@@ -24,6 +62,8 @@
                 <th>@Html.DisplayNameFor(D => D.IsDeleted)</th>
                 <th>@Html.DisplayNameFor(D => D.HiringDate)</th>
                 <th>@Html.DisplayNameFor(D => D.CreateAt)</th>
+                <th>@Html.DisplayNameFor(D => D.Department)</th>
+
 
                 <th>Details</th>
                 <th>Update</th>
@@ -44,6 +84,14 @@
                     <td>@employee.IsDeleted</td>
                     <td>@employee.HiringDate</td>
                     <td>@employee.CreateAt</td>
+                    @if(employee.Department is null )
+                    {
+                        <td>No Department</td>
+                    }
+                    else
+                    {
+                        <td>@employee.Department.Name</td>
+                    }
                     <td>
                         <a class="btn btn-info" asp-action="Details" asp-route-id="@employee.Id">Details</a>
                     </td>

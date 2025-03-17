@@ -68,7 +68,8 @@
 
  @model EmployeeDTOs
 @{
-    ViewData["Title"] = "Creat";
+    ViewData["Title"] = "Create";
+    var Departments = new SelectList(ViewData["Departments"] as IEnumerable<Department>, nameof(Department.Id), nameof(Department.Name));
 }
 
 <h1 class="text-center my-4">Create Department</h1>
@@ -132,9 +133,15 @@
              <label class="col-form-label" asp-for="CreateAt"></label> 
              <input asp-for="CreateAt" class="form-control" /> 
              <span asp-validation-for="CreateAt" class="text-danger"></span> 
-         </div> 
+         </div>
+        <div class="form-group">
+            <label class="col-form-label" asp-for="DepartmentId"></label>
+            <select asp-for="DepartmentId" asp-items="@Departments"  class="form-control">
+                <option value="@null">-- Select Department --</option>
+            </select>
+        </div>
 
-        <div class="d-flex justify-content-start gap-3">
+        <div class="d-flex justify-content-start gap-3 m-3">
             <input type="submit" value="Submit" class="btn btn-primary" />
             <a asp-action="Index" class="btn btn-light">Back to List</a>
         </div>

@@ -12,5 +12,9 @@ namespace Company.DAL.Models
         public string Code { get; set; }
         public string Name { get; set; }
         public DateTime CreateAt { get; set; }
+        // Navigation Property [ Many ]
+       // public ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();
+        public ICollection<Employee> Employees { get; set; } = new HashSet<Employee>();
+
     }
 }

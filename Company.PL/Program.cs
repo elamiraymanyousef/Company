@@ -1,6 +1,7 @@
 using Company.BLL.Interfaces;
 using Company.BLL.Repositories;
 using Company.DAL.Data.Contexts;
+using Company.PL.Maping;
 using Microsoft.EntityFrameworkCore;
 
 namespace Company.PL
@@ -18,8 +19,13 @@ namespace Company.PL
             builder.Services.AddScoped<IEmployeeReposoitory, EmployeeRepository>(); // Register DI for EmployeeRepository
             builder.Services.AddDbContext<CompanyDbContext>(options =>
             {
+             //options.UseLazyLoadingProxies();
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             }); // Register DI for CompanyDbContext
+            builder.Services.AddAutoMapper(E=>E.AddProfile(new EmployeeProfile()));
+            builder.Services.AddAutoMapper(D => D.AddProfile(new DepartmentProfile()));
+
+
 
             var app = builder.Build();
 

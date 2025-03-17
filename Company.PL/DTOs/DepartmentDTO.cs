@@ -12,5 +12,6 @@ namespace Company.PL.DTOs
 
         [Required(ErrorMessage = "Date is Required!")]
         public DateTime CreateAt { get; set; }
+
     }
 }
