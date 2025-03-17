@@ -3,6 +3,7 @@ using Company.BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Company.PL.DTOs;
 using Company.DAL.Models;
+using AutoMapper;
 
 namespace Company.PL.Controllers
 {
@@ -10,17 +11,41 @@ namespace Company.PL.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _departmentRepository;
+        private readonly IMapper _mapper;
 
         // Ask CLR to create an object of DepartmentRepository
-        public DepartmentController(IDepartmentRepository departmentRepository)
+        public DepartmentController(
+            IDepartmentRepository departmentRepository,
+             IMapper mapper
+            )
         {
             _departmentRepository = departmentRepository;
+            _mapper = mapper;
         }
 
         [HttpGet] // GET: Department/Index
-        public IActionResult Index()
+        public IActionResult Index( string? searchValue)
         {
-            var departments = _departmentRepository.GetAll();
+
+
+            IEnumerable<Department> departments;
+            if (string.IsNullOrEmpty(searchValue))
+            {
+                departments = _departmentRepository.GetAll();
+            }
+            else
+            {
+                departments = _departmentRepository.GetByName(searchValue);
+            }
+
+
+
+
+            //ViewData["Message"] = "Welcome To Department Page";
+            ViewBag.Message = "Welcome To Department Page";
+
+
+            //var departments = _departmentRepository.GetAll();
             return View(departments);
         }
 
@@ -35,16 +60,26 @@ namespace Company.PL.Controllers
         {
             if (ModelState.IsValid) // Server Side Validation
             {
-                var department = new Department
-                {
-                    Code = model.Code,
-                    Name = model.Name,
-                    CreateAt = model.CreateAt
-                };
+                #region Manual Maper
+                //var department = new Department
+                //{
+                //    Code = model.Code,
+                //    Name = model.Name,
+                //    CreateAt = model.CreateAt
+                //}; 
+                #endregion
+
+                // Auto Mapper
+                var department = _mapper.Map<Department>(model);
                 var count = _departmentRepository.Add(department);
                 if (count > 0)
+                { 
+                    TempData["Message"] = "Department Added Successfully!";
                     return RedirectToAction("Index");
+
+                }
             }
+
             return View(model);
         }
 
@@ -88,7 +123,10 @@ namespace Company.PL.Controllers
                 {
                     var count = _departmentRepository.Update(department);
                     if (count > 0)
+                    {
+                        TempData["Message"] = "Department Updated Successfully!";
                         return RedirectToAction("Index");
+                    }
                 }
             }
             return View(department);
@@ -124,7 +162,12 @@ namespace Company.PL.Controllers
                 {
                     var count = _departmentRepository.Delete(department);
                     if (count > 0)
-                        return RedirectToAction("Index");
+                    {
+                     TempData["Message"] = "Department Deleted Successfully!";
+
+                       return RedirectToAction("Index");
+                    }
+                       
                 }
             }
             return View(department);

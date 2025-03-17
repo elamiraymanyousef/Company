@@ -1,6 +1,7 @@
 ﻿using Company.BLL.Interfaces;
 using Company.DAL.Data.Contexts;
 using Company.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,20 @@ namespace Company.BLL.Repositories
 {
     public class EmployeeRepository : GenericRepository<Employee> ,IEmployeeReposoitory
     {
+        private readonly CompanyDbContext _companyDb;
+
         //Ask clr to create object  from CompanyDbContext 
 
         public EmployeeRepository(CompanyDbContext companyDb):base(companyDb)
         {
+           _companyDb = companyDb;
         }
-        
+
+        public List<Employee> GetByName(string Name)
+        {
+            return _companyDb.Employees.Include(E=> E.Department).Where(E=>E.Name.ToLower().Contains(Name.ToLower())).ToList();
+        }
+
 
         //private readonly CompanyDbContext _companyDb;
 

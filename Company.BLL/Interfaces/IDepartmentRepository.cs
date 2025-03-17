@@ -14,5 +14,6 @@ namespace Company.BLL.Interfaces
         //int Add(Department department);
         //int Update(Department department);
         //int Delete(Department department);
+        List<Department> GetByName(string Name);
     }
 }

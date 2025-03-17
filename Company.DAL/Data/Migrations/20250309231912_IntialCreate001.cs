@@ -5,7 +5,7 @@
 namespace Company.DAL.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Intial02 : Migration
+    public partial class IntialCreate001 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
