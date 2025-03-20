@@ -10,17 +10,21 @@ namespace Company.PL.Controllers
     public class DepartmentController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly IDepartmentRepository _departmentRepository;
 
+        // ============== olde way==============
+        //private readonly IDepartmentRepository _departmentRepository;
+        // ============ new way ================
+        private readonly IUnitOfWork _unitOfWork;
 
 
         // Constructor Injection
         // Ask CLR to create an object of DepartmentRepository
 
-        public DepartmentController(IMapper mapper,IDepartmentRepository departmentRepository)
+        public DepartmentController(IMapper mapper,IUnitOfWork unitOfWork)//IDepartmentRepository departmentRepository)
         {
             _mapper = mapper;
-            _departmentRepository = departmentRepository;
+            _unitOfWork = unitOfWork;
+            //_departmentRepository = departmentRepository;
         }
 
 
@@ -28,16 +32,16 @@ namespace Company.PL.Controllers
 
 
         [HttpGet] // GET: Department/Index
-        public IActionResult Index(string? SearchName)
+        public IActionResult Index(string? searchValue)
         {
             IEnumerable<Department> departments;
-            if(string.IsNullOrEmpty(SearchName))
+            if(string.IsNullOrEmpty(searchValue))
             {
-                departments = _departmentRepository.GetAll();
+                departments = _unitOfWork.departmentRepository.GetAll();
             }
             else
             {
-                departments = _departmentRepository.GetDepartmentByName(SearchName);
+                departments = _unitOfWork.departmentRepository.GetDepartmentByName(searchValue);
             }
             return View(departments);
         }
@@ -58,16 +62,18 @@ namespace Company.PL.Controllers
         {
             if (ModelState.IsValid) // Server Side Validation
             {
-                //var department = new Department
-                //{
-                //    Code = model.Code,
-                //    Name = model.Name,
-                //    CreateAt = model.CreateAt
-                //};
+                var department = new Department
+                {
+                    Code = model.Code,
+                    Name = model.Name,
+                    CreateAt = model.CreateAt
+                };
 
                 // ====== outo mapping ======
-                var department= _mapper.Map<Department>(model);
-                var count = _departmentRepository.Add(department);
+                //var department= _mapper.Map<Department>(model);
+                _unitOfWork.departmentRepository.Add(department);
+                int count = _unitOfWork.complete();
+
                 if (count > 0)
                 {
                     TempData["Message"] = "Department Added Successfully";
@@ -83,7 +89,7 @@ namespace Company.PL.Controllers
         {
             if (id is null)
                 return BadRequest();// stat code 400
-            var department = _departmentRepository.Get(id.Value);
+            var department = _unitOfWork.departmentRepository.Get(id.Value);
 
             if (department is null)
                 return NotFound(new {StatusCode=400,Message=$"Department with id : {id} not found"});
@@ -131,8 +137,10 @@ namespace Company.PL.Controllers
                     Name = department.Name,
                     CreateAt = department.CreateAt
                 };
-                int count = _departmentRepository.Update(departmentm);
-                if (count > 0)
+                /*int count =*/ _unitOfWork.departmentRepository.Update(departmentm);
+            int count = _unitOfWork.complete();
+
+            if (count > 0)
                 {
                      TempData["Message"] = "Department Updated Successfully";
                     return RedirectToAction(nameof(Index)); // بتحولك علي الصفحة الرئيسية
@@ -171,8 +179,10 @@ namespace Company.PL.Controllers
                Name = dTO.Name,
                CreateAt = dTO.CreateAt
            };
-           int count = _departmentRepository.Delete(departmentm);
-           if (count > 0)
+          /* int count =*/ _unitOfWork.departmentRepository.Delete(departmentm);
+            int count = _unitOfWork.complete();
+
+            if (count > 0)
            {
                 TempData["Message"] = "Department Deleted Successfully";
                 return RedirectToAction(nameof(Index)); // بتحولك علي الصفحة الرئيسية

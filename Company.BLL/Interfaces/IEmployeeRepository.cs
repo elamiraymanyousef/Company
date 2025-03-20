@@ -9,7 +9,7 @@ namespace Company.BLL.Interfaces
 {
     public interface IEmployeeRepository : IGenaricRepository<Employee>
     {
-        IEnumerable<Employee> GetByName(string name);
+       Task< IEnumerable<Employee>> GetByNameAsync(string name);
         //IEnumerable<Employee> GetAll();
         //Employee? Get(int id);
         //int Add(Employee department);

@@ -57,8 +57,8 @@ namespace Company.BLL.Repositories
         public IEnumerable<Department> GetDepartmentByName(string name)
         {
             return _context.Departments
-                .Where(e => e.Name.ToLower()
-                .Contains(name.ToLower())).ToList();
+                .Where(e => e.Name.ToLower() == name.ToLower()).ToList();
+                //.Contains(name.ToLower())).ToList();
         }
     }
 }

@@ -14,6 +14,7 @@
 <div class="container">
     <form asp-action="Delete">
         <div class="form-group">
+            <input asp-for="ImageName" hidden />
             <label class="col-form-label" asp-for="Name"></label>
             <input asp-for="Name" class="form-control" readonly />
             

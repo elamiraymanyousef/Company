@@ -26,5 +26,7 @@ namespace Company.PL.DTOs
 
         //public string? EmoloyeeType { get; set; }
         public string? Department { get; set; }
+        public IFormFile? Image { get; set; }
+        public string? ImageName { get; set; }
     }
 }

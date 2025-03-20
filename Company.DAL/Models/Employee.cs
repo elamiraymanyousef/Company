@@ -18,7 +18,7 @@ namespace Company.DAL.Models
         public bool IsDeleted { get; set; }
         public DateTime HiringDate { get; set; }
 
-
+        public string? ImageName { get; set; }
         // relation with department
         public int? DepartmentId { get; set; }
 

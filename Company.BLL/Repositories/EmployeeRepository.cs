@@ -56,11 +56,11 @@ namespace Company.BLL.Repositories
             _context = context;
         }
 
-        public IEnumerable<Employee> GetByName(string SearchName)
+        public async Task<IEnumerable<Employee>> GetByNameAsync(string SearchName)
         {
-            return _context.Employees.Include(D => D.Department)
+            return await _context.Employees.Include(D => D.Department)
                 .Where(e => e.Name.ToLower()
-                .Contains(SearchName.ToLower())).ToList();
+                .Contains(SearchName.ToLower())).ToListAsync();
         }
     }
 }

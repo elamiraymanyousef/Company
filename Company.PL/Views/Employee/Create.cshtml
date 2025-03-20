@@ -1,14 +1,14 @@
 ﻿@model CreatEmployeeDTO
-@inject IDepartmentRepository _departmentRepository;
+@* @inject IDepartmentRepository _departmentRepository; *@
 @{
     ViewData["Title"] = "Creat";
 	// <option value="">Select Department</option>
 	// cast viewdata to same type of return from controller
 	// ========first way to send data from controller to view ==========
-    // var AllDepartments = new SelectList(ViewData["Department"] as IEnumerable<Department>, nameof(Department.Id), nameof(Department.Name));
+     var AllDepartments = new SelectList(ViewData["Department"] as IEnumerable<Department>, nameof(Department.Id), nameof(Department.Name));
 
 	// ========second way to get data from  view directly==========
-	var AllDepartments = new SelectList(_departmentRepository.GetAll(), nameof(Department.Id), nameof(Department.Name));
+	//var AllDepartments = new SelectList(_departmentRepository.GetAll(), nameof(Department.Id), nameof(Department.Name));
 
 	// ========there is another way to get data from view directly==========
 	// use for loop to get data from view
@@ -25,9 +25,9 @@
 
 }
 
-<h1 class="text-center my-4">Create Department</h1>
+<h1 class="text-center my-4">Create Employee</h1>
 <div class="container">
-    <form asp-action="Create">
+    <form asp-action="Create" enctype="multipart/form-data">
         @* <div class="form-group"> *@
         @*     <label class="col-form-label" asp-for="Name"></label> *@
         @*     <input asp-for="Name" class="form-control" /> *@

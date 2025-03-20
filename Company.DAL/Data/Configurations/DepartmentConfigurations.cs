@@ -13,6 +13,7 @@ namespace Company.DAL.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Department> D)
         {
+            // relation one to many
             D.Property(d => d.Id).UseIdentityColumn(10, 10);
             D.HasMany(D => D.Employees)
                 .WithOne(E => E.Department)

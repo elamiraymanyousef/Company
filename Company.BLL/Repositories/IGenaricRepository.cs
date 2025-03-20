@@ -18,38 +18,38 @@ namespace Company.BLL.Repositories
         {
             _companyDb = companyDb;
         }
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             // to include department name in the employee list
             // return _companyDb.Set<T>().Include("Department").ToList();
             if(typeof(T) == typeof(Employee))
             {
-                return (IEnumerable<T>)_companyDb.Set<T>().Cast<Employee>().Include(e => e.Department).ToList();
+                return (IEnumerable<T>) await _companyDb.Set<T>().Cast<Employee>().Include(e => e.Department).ToListAsync();
             }
-            return _companyDb.Set<T>().ToList();
+            return await _companyDb.Set<T>().ToListAsync();
         }
 
-        public T? Get(int id)
+        public async Task<T?> GetAsnyc(int id)
         {
-            return _companyDb.Set<T>().Find(id);
+            return await _companyDb.Set<T>().FindAsync(id);
         }
 
-        public int Add(T department)
+        public async Task AddAsync(T department)
         {
-            _companyDb.Set<T>().Add(department);
-            return _companyDb.SaveChanges();
+           await _companyDb.Set<T>().AddAsync(department);
+            //return _companyDb.SaveChanges();
         }
 
-        public int Update(T department)
+        public void Update(T department)
         {
             _companyDb.Set<T>().Update(department);
-            return _companyDb.SaveChanges();
+            //return _companyDb.SaveChanges();
         }
 
-        public int Delete(T department)
+        public void Delete(T department)
         {
             _companyDb.Set<T>().Remove(department);
-            return _companyDb.SaveChanges();
+            //return _companyDb.SaveChanges();
         }
     }
     }

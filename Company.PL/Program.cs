@@ -15,6 +15,7 @@ namespace Company.PL
             // Add services to the container.
             builder.Services.AddControllersWithViews(); // Register Built-in MVC services
 
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); // Register DI for UnitOfWork
             builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>(); // Register DI for DepartmentRepository
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>(); // Register DI for EmployeeRepository
             //builder.Services.AddAutoMapper(typeof(EmployeeMapper)); 

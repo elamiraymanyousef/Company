@@ -14,11 +14,11 @@
 }
 <h1 class="text-center my-4">Edit Employee</h1>
 <div class="container">
-    <form asp-action="Edit">
+    <form asp-action="Edit" enctype="multipart/form-data">
         @* // هنا لوعلوز استخدم ال partial view هعمل الجز المشترك comment انما هنا مش هعملها علشانهي مشكله في الmodel  *@
-        @* <partial name="EmployeePartialView/_CreatEditePartialView" /> *@
+        @* <partial name="EmployeePartialView/_CreatEditePartialView" />  *@
 
-
+        <input asp-for="ImageName"  hidden/>
         <div class="form-group">
             <label class="col-form-label" asp-for="Name"></label>
             <input asp-for="Name" class="form-control" />
